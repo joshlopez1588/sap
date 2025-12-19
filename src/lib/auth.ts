@@ -7,6 +7,7 @@ import { users } from './db/schema';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   // No adapter needed - using JWT strategy with credentials
+  trustHost: true, // Trust Railway/deployment hosts
   session: {
     strategy: 'jwt',
     maxAge: 8 * 60 * 60, // 8 hours
