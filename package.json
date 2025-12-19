@@ -17,7 +17,6 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "next-auth": "^5.0.0-beta.25",
-    "@auth/drizzle-adapter": "^1.7.0",
     "drizzle-orm": "^0.35.0",
     "postgres": "^3.4.5",
     "@anthropic-ai/sdk": "^0.27.0",

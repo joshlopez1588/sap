@@ -1,13 +1,12 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
-import { db } from './db';
+import { getDb } from './db';
 import { users } from './db/schema';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: DrizzleAdapter(db),
+  // No adapter needed - using JWT strategy with credentials
   session: {
     strategy: 'jwt',
     maxAge: 8 * 60 * 60, // 8 hours
@@ -31,6 +30,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const email = credentials.email as string;
         const password = credentials.password as string;
 
+        const db = getDb();
         const user = await db.query.users.findFirst({
           where: eq(users.email, email),
         });
