@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { frameworks, checkCategories } from '@/lib/db/schema';
+import { frameworks, checkCategories, applications } from '@/lib/db/schema';
 import { eq, desc, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
@@ -72,8 +72,8 @@ export async function GET(request: NextRequest) {
       frameworkList.map(async (framework) => {
         const appCount = await db
           .select({ count: sql<number>`count(*)::int` })
-          .from(require('@/lib/db/schema').applications)
-          .where(eq(require('@/lib/db/schema').applications.frameworkId, framework.id));
+          .from(applications)
+          .where(eq(applications.frameworkId, framework.id));
 
         return {
           ...framework,
