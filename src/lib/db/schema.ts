@@ -443,3 +443,78 @@ export const findingsRelations = relations(findings, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export const checkCategoriesRelations = relations(checkCategories, ({ one }) => ({
+  framework: one(frameworks, {
+    fields: [checkCategories.frameworkId],
+    references: [frameworks.id],
+  }),
+}));
+
+export const applicationRolesRelations = relations(applicationRoles, ({ one }) => ({
+  application: one(applications, {
+    fields: [applicationRoles.applicationId],
+    references: [applications.id],
+  }),
+}));
+
+export const sodConflictsRelations = relations(sodConflicts, ({ one }) => ({
+  application: one(applications, {
+    fields: [sodConflicts.applicationId],
+    references: [applications.id],
+  }),
+  role1: one(applicationRoles, {
+    fields: [sodConflicts.role1Id],
+    references: [applicationRoles.id],
+    relationName: 'role1',
+  }),
+  role2: one(applicationRoles, {
+    fields: [sodConflicts.role2Id],
+    references: [applicationRoles.id],
+    relationName: 'role2',
+  }),
+}));
+
+export const userAccessRecordsRelations = relations(userAccessRecords, ({ one, many }) => ({
+  reviewCycle: one(reviewCycles, {
+    fields: [userAccessRecords.reviewCycleId],
+    references: [reviewCycles.id],
+  }),
+  employee: one(employees, {
+    fields: [userAccessRecords.employeeId],
+    references: [employees.id],
+  }),
+  findings: many(findings),
+}));
+
+export const reportsRelations = relations(reports, ({ one }) => ({
+  reviewCycle: one(reviewCycles, {
+    fields: [reports.reviewCycleId],
+    references: [reviewCycles.id],
+  }),
+  generatedBy: one(users, {
+    fields: [reports.generatedById],
+    references: [users.id],
+  }),
+}));
+
+export const auditLogsRelations = relations(auditLogs, ({ one }) => ({
+  user: one(users, {
+    fields: [auditLogs.userId],
+    references: [users.id],
+  }),
+}));
+
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, {
+    fields: [sessions.userId],
+    references: [users.id],
+  }),
+}));
+
+export const aiConversationsRelations = relations(aiConversations, ({ one }) => ({
+  user: one(users, {
+    fields: [aiConversations.userId],
+    references: [users.id],
+  }),
+}));
