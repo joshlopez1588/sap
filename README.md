@@ -2,22 +2,38 @@
 
 AI-assisted User Access Review platform for financial institutions. Helps security teams conduct quarterly reviews of who has access to what systems, identify compliance issues, and document decisions for regulators.
 
+**Live Demo:** https://sap-web-production.up.railway.app
+
+## Current Status (December 2024)
+
+| Module | Status | Description |
+|--------|--------|-------------|
+| Frameworks | ✅ Complete | CRUD, check categories, severity rules |
+| Applications | ✅ Complete | CRUD, roles, SoD conflicts, completeness scoring |
+| Reviews | ✅ Complete | CRUD, CSV import for user access records |
+| Findings | ✅ Complete | List, filter by severity, decision workflow |
+| Reports | ✅ Complete | Generate and list compliance reports |
+| Dashboard | ✅ Complete | Real-time statistics from database |
+| AI Analysis | 🔜 Pending | Claude-powered access analysis |
+| AI Chat | 🔜 Pending | Conversational finding review assistant |
+
 ## Features
 
 - **Framework Management** - Create review frameworks with configurable check categories
 - **Application Profiles** - Register apps with roles, SoD rules, and classification
-- **Review Cycles** - Conduct quarterly access reviews with AI-powered analysis
-- **Finding Management** - Track and resolve security findings
-- **AI Assistance** - Claude-powered analysis and decision support
+- **Review Cycles** - Conduct quarterly access reviews with CSV data import
+- **Finding Management** - Track and resolve security findings with decision workflow
+- **AI Assistance** - Claude-powered analysis and decision support (coming soon)
 - **Compliance Reports** - Generate executive summaries, attestation certificates
 
 ## Tech Stack
 
-- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
+- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS, shadcn/ui
 - **Backend**: Next.js API Routes, Drizzle ORM
-- **Database**: PostgreSQL
-- **Auth**: NextAuth.js (email/password)
-- **AI**: Anthropic Claude API
+- **Database**: PostgreSQL (Railway)
+- **Auth**: NextAuth.js v5 (email/password with JWT)
+- **AI**: Anthropic Claude API (integration pending)
+- **Deployment**: Railway (auto-deploy from GitHub)
 
 ## Local Development
 
@@ -118,12 +134,89 @@ src/
 │   └── api/            # API routes
 ├── components/
 │   ├── layout/         # App shell, sidebar, header
-│   └── ui/             # UI components
+│   ├── applications/   # Application-specific components
+│   ├── frameworks/     # Framework-specific components
+│   └── ui/             # shadcn/ui components
 └── lib/
     ├── db/             # Drizzle schema and client
+    │   └── schema.ts   # Database schema (16 tables)
     ├── auth.ts         # NextAuth configuration
     └── utils.ts        # Utility functions
 ```
+
+## API Routes
+
+### Frameworks
+- `GET/POST /api/frameworks` - List/Create frameworks
+- `GET/PUT/DELETE /api/frameworks/[id]` - Single framework CRUD
+- `GET/POST /api/frameworks/[id]/check-categories` - Check categories
+- `PUT/DELETE /api/frameworks/[id]/check-categories/[categoryId]` - Single category
+
+### Applications
+- `GET/POST /api/applications` - List/Create applications
+- `GET/PUT/DELETE /api/applications/[id]` - Single application CRUD
+- `GET/POST /api/applications/[id]/roles` - Application roles
+- `PUT/DELETE /api/applications/[id]/roles/[roleId]` - Single role
+- `GET/POST /api/applications/[id]/sod-conflicts` - SoD conflicts
+- `PUT/DELETE /api/applications/[id]/sod-conflicts/[conflictId]` - Single conflict
+
+### Reviews
+- `GET/POST /api/reviews` - List/Create review cycles
+- `GET/PUT/DELETE /api/reviews/[id]` - Single review CRUD
+- `POST /api/reviews/[id]/import` - Import CSV user access data
+- `GET /api/reviews/[id]/access-records` - Get user access records
+
+### Findings
+- `GET /api/findings` - List findings (with filters)
+- `GET/PUT /api/findings/[id]` - Single finding + decision workflow
+
+### Reports
+- `GET/POST /api/reports` - List/Generate reports
+
+### Dashboard
+- `GET /api/dashboard` - Dashboard statistics
+
+## Database Schema
+
+The app uses 16 PostgreSQL tables:
+
+| Table | Purpose |
+|-------|---------|
+| users | User accounts |
+| sessions | Auth sessions |
+| frameworks | Review frameworks |
+| check_categories | Framework check rules |
+| applications | Systems under review |
+| application_roles | App role definitions |
+| sod_conflicts | Separation of duties rules |
+| employees | HR employee data |
+| review_cycles | Quarterly reviews |
+| user_access_records | Imported access data |
+| findings | Discovered issues |
+| ai_conversations | AI chat history |
+| reports | Generated reports |
+| audit_logs | Action audit trail |
+
+## What's Next (TODO)
+
+1. **AI Analysis Integration**
+   - `POST /api/reviews/[id]/analyze` - Trigger AI analysis
+   - Claude analyzes user access against framework rules
+   - Auto-generates findings with AI rationale
+
+2. **AI Chat for Findings**
+   - `POST /api/ai/conversations` - Start AI conversation
+   - Discuss findings with Claude for decision help
+   - Apply AI suggestions to decision form
+
+3. **Report Generation**
+   - PDF generation for executive summaries
+   - Excel export for remediation tracking
+   - Evidence packages for auditors
+
+4. **Audit Logging**
+   - Log all CRUD operations
+   - Searchable audit trail
 
 ## License
 
